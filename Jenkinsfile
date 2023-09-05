@@ -3,7 +3,7 @@ pipeline {
 
     // Define the local server directory here at the top level
     environment {
-        localServerDir = '/var/www/html/newWeb'
+        localServerDir = '/var/www/html/newWeb/'
     }
 
     stages {
