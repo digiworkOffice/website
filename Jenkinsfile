@@ -16,20 +16,43 @@ pipeline {
             }
         }
 
-        stage('Deploy to Local Server') {
-            steps {
-                // Remove existing files (optional)
-                sh "rm -rf ${localServerDir}*"
-
-                // Copy all files and directories from the workspace to the local server directory
-                sh "cp -r * ${localServerDir}"
-
-                // Restart the Nginx web server on the local server
-                sh 'sudo systemctl restart nginx'
-
-                echo "Website deployed to ${localServerDir}"
+        stage( 'frontend deploy' ){
+            steps{
+                dir('webfronend'){
+                    sh 'npm install -f'
+                    sh 'npm run build'
+                }
             }
-        }
+        }  
+        
+        stage( 'backend deploy' ){
+            steps{
+                dir('server'){
+                    sh 'npm install -f '
+                 
+                }
+            }
+        }  
+
+        
+        stage( ' deploy' ){
+            steps{
+
+                sh 'rsync -avz webfrontend/build /var/www/html/newWeb/'
+
+                sh 'rsync -avz server /var/www/html/newWeb/'
+
+                
+                    sh 'pm2 restart server.js'
+                    sh 'systemctl restart nginx'
+
+            
+            }
+        }  
+
+
+        
+
 
     }
 
