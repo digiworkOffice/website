@@ -19,7 +19,7 @@ pipeline {
         stage( 'frontend deploy' ){
             steps{
                 dir('webfronend'){
-                    sh 'npm install -f'
+                    sh 'npm install'
                     sh 'npm run build'
                 }
             }
@@ -28,7 +28,7 @@ pipeline {
         stage( 'backend deploy' ){
             steps{
                 dir('server'){
-                    sh 'npm install -f '
+                    sh 'npm install'
                  
                 }
             }
