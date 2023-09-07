@@ -4,7 +4,7 @@ pipeline {
     // Define the local server directory here at the top level
     environment {
         localServerDir = '/var/www/html/newWeb/'
-        sshCredentials = '81e1880b-1679-4f51-bc50-e25754fbc782' // Replace with your SSH credentials ID
+        sshCredentials = 'f190f019-b6ec-4aa9-9223-4909a2b6a584' // Replace with your SSH credentials ID
         serverUser = 'ubuntu' // Replace with the SSH username for the server
         serverAddress = '43.204.233.165' // Replace with the server address
     }
