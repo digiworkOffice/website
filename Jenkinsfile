@@ -102,7 +102,7 @@ pipeline {
                     remoteServer.host = '52.66.248.118'
                     remoteServer.user = 'ubuntu'
                     def remoteFolderPathClientSSR = '/var/www/html/newWeb/build'
-                    def remoteFolderPathClientSSR = '/var/www/html/newWeb/server'
+                    def remoteFolderPathServer = '/var/www/html/newWeb/server'
                     sshagent(['f190f019-b6ec-4aa9-9223-4909a2b6a584']) {
                             sh "ssh -tt -o StrictHostKeyChecking=no ${remoteServer.user}@${remoteServer.host} 'mkdir -p ${remoteFolderPathClientSSR} && mkdir -p ${remoteFolderPathServer}'"
 
