@@ -10,8 +10,8 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    def scmVars = checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], userRemoteConfigs: [[url: 'https://github.com/digiworkOffice/website.git']]])
-                    echo "Checked out 'main' branch"
+                    def scmVars = checkout([$class: 'GitSCM', branches: [[name: '*/dev']], doGenerateSubmoduleConfigurations: false, extensions: [], userRemoteConfigs: [[url: 'https://github.com/digiworkOffice/website.git']]])
+                    echo "Checked out 'dev' branch"
                 }
             }
         }
