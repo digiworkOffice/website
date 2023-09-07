@@ -19,8 +19,8 @@ pipeline {
         stage( 'frontend deploy' ){
             steps{
                 dir('webfronend'){
-                    sh 'npm install'
-                    sh 'npm run build'
+                    sh 'sudo npm install'
+                    sh 'sudo npm run build'
                 }
             }
         }  
@@ -28,7 +28,7 @@ pipeline {
         stage( 'backend deploy' ){
             steps{
                 dir('server'){
-                    sh 'npm install'
+                    sh 'sudo npm install'
                  
                 }
             }
@@ -43,8 +43,8 @@ pipeline {
                 sh 'rsync -avz server /var/www/html/newWeb/'
 
                 
-                    sh 'pm2 restart server.js'
-                    sh 'systemctl restart nginx'
+                    sh 'sudo pm2 restart server.js'
+                    sh 'sudo systemctl restart nginx'
 
             
             }
