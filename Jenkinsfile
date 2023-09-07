@@ -80,73 +80,47 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout') {
-            steps {
-                script {
-                    def scmVars = checkout([$class: 'GitSCM', branches: [[name: '*/dev']], doGenerateSubmoduleConfigurations: false, extensions: [], userRemoteConfigs: [[url: 'https://github.com/digiworkOffice/website.git']]])
-                    echo "Checked out 'dev' branch"
-                }
-            }
-        }
-
-        // stage('Build') {
+        // stage('Checkout') {
         //     steps {
-        //         sh 'cd webfrontend && npm install i && npm run build'
+        //         script {
+        //             def scmVars = checkout([$class: 'GitSCM', branches: [[name: '*/dev']], doGenerateSubmoduleConfigurations: false, extensions: [], userRemoteConfigs: [[url: 'https://github.com/digiworkOffice/website.git']]])
+        //             echo "Checked out 'dev' branch"
+        //         }
         //     }
         // }
+        stage('Build') {
+            steps {
+                sh 'cd webfrontend && npm install i && npm run build'
+            }
+        }
         stage('Transfer') {
             steps {
                 script {
-                    // def remoteServer = [:]
-                    // remoteServer.name = 'RemoteServer'
-                    // remoteServer.allowAnyHosts = true
-                    // remoteServer.host = '3.111.77.159'
-                    // remoteServer.user = 'ubuntu'
-                    // def remoteFolderPathClientSSR = '/home/ubuntu/workspace/Gyapu_Dev/client-ssr/'
-                    // def remoteFolderPathServer = '/home/ubuntu/workspace/Gyapu_Dev/server/'
-                    // sshagent(['6f8c9e03-efe4-4e16-abe2-7c64aa313582']) {
-                    //         sh "ssh -tt -o StrictHostKeyChecking=no ${remoteServer.user}@${remoteServer.host} 'mkdir -p ${remoteFolderPathClientSSR} && mkdir -p ${remoteFolderPathServer}'"
+                    def remoteServer = [:]
+                    remoteServer.name = 'RemoteServer'
+                    remoteServer.allowAnyHosts = true
+                    remoteServer.host = '52.66.248.118'
+                    remoteServer.user = 'ubuntu'
+                    def remoteFolderPathClientSSR = '/var/www/html/newWeb/build'
+                    def remoteFolderPathClientSSR = '/var/www/html/newWeb/server'
+                    sshagent(['f190f019-b6ec-4aa9-9223-4909a2b6a584']) {
+                            sh "ssh -tt -o StrictHostKeyChecking=no ${remoteServer.user}@${remoteServer.host} 'mkdir -p ${remoteFolderPathClientSSR} && mkdir -p ${remoteFolderPathServer}'"
 
-                    //         sh "scp -r ./client-ssr ${remoteServer.user}@${remoteServer.host}:/home/ubuntu/workspace/Gyapu_Dev/"
+                            sh "scp -r ./build ${remoteServer.user}@${remoteServer.host}:/var/www/html/newWeb/"
 
-                    //         sh "scp -r ./server ${remoteServer.user}@${remoteServer.host}:/home/ubuntu/workspace/Gyapu_Dev/"
+                            sh "scp -r ./server ${remoteServer.user}@${remoteServer.host}:/var/www/html/newWeb/"
+                                          echo "completed"
 
-                    //         sh "ssh -tt -o StrictHostKeyChecking=no ${remoteServer.user}@${remoteServer.host} 'cd ${remoteFolderPathServer}  && sudo pm2 reload ./pm2.json && cd ${remoteFolderPathClientSSR}  && sudo pm2 reload ./pm2.json'"
+
+                            // sh "ssh -tt -o StrictHostKeyChecking=no ${remoteServer.user}@${remoteServer.host} 'cd ${remoteFolderPathServer}  && sudo pm2 reload ./pm2.json && cd ${remoteFolderPathClientSSR}  && sudo pm2 reload ./pm2.json'"
                             
-                    // }
-
-                              withCredentials([usernamePassword( usernameVariable: 'digitech', passwordVariable: 'root')]) {
-
-                     sh 'echo ${PASSWORD} | sudo -S cp -r ./webfrontend/build/* /var/www/html/newWeb/'
-                     sh 'echo ${PASSWORD} | sudo -S cp -r ./server/* /var/www/html/newWeb/'
-                     sh 'echo ${PASSWORD} | sudo -S cd server && pm2 start server.js'
-
-                    sh 'systemctl restart nginx'
-                    echo "copied to local server"
-                              }
+                    }
+                    
                 }
                 
             }
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
