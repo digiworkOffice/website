@@ -4,6 +4,9 @@ pipeline {
     // Define the local server directory here at the top level
     environment {
         localServerDir = '/var/www/html/newWeb/'
+        sshCredentials = '81e1880b-1679-4f51-bc50-e25754fbc782' // Replace with your SSH credentials ID
+        serverUser = 'ubuntu' // Replace with the SSH username for the server
+        serverAddress = '43.204.233.165' // Replace with the server address
     }
 
     stages {
@@ -16,44 +19,46 @@ pipeline {
             }
         }
 
-        stage( 'frontend deploy' ){
-            steps{
-                dir('webfronend'){
-                    sh 'sudo npm install'
-                    sh 'sudo npm run build'
+        stage('frontend deploy') {
+            steps {
+                dir('webfronend') {
+                    script {
+                        // Run npm install and npm build on the server using SSH
+                        sshagent(credentials: [sshCredentials]) {
+                            sh "ssh ${serverUser}@${serverAddress} 'cd ${localServerDir}/webfrontend && sudo npm install'"
+                            sh "ssh ${serverUser}@${serverAddress} 'cd ${localServerDir}/webfrontend && sudo npm run build'"
+                        }
+                    }
                 }
             }
-        }  
-        
-        stage( 'backend deploy' ){
-            steps{
-                dir('server'){
-                    sh 'sudo npm install'
-                 
+        }
+
+        stage('backend deploy') {
+            steps {
+                dir('server') {
+                    script {
+                        // Run npm install on the server using SSH
+                        sshagent(credentials: [sshCredentials]) {
+                            sh "ssh ${serverUser}@${serverAddress} 'cd ${localServerDir}/server && sudo npm install'"
+                        }
+                    }
                 }
             }
-        }  
+        }
 
-        
-        stage( ' deploy' ){
-            steps{
+        stage('deploy') {
+            steps {
+                // Add your SSH key to the agent's environment
+                sshagent(credentials: [sshCredentials]) {
+                    // Use SSH to copy files and restart services on the server
+                    sh "rsync -avz webfrontend/build ${serverUser}@${serverAddress}:${localServerDir}"
+                    sh "rsync -avz server ${serverUser}@${serverAddress}:${localServerDir}"
 
-                sh 'rsync -avz webfrontend/build /var/www/html/newWeb/'
-
-                sh 'rsync -avz server /var/www/html/newWeb/'
-
-                
-                    sh 'sudo pm2 restart server.js'
-                    sh 'sudo systemctl restart nginx'
-
-            
+                    sh "ssh ${serverUser}@${serverAddress} 'sudo pm2 restart ${localServerDir}/server.js'"
+                    sh "ssh ${serverUser}@${serverAddress} 'sudo systemctl restart nginx'"
+                }
             }
-        }  
-
-
-        
-
-
+        }
     }
 
     post {
