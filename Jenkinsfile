@@ -88,6 +88,7 @@ pipeline {
                 }
             }
         }
+
         // stage('Build') {
         //     steps {
         //         sh 'cd webfrontend && npm install i && npm run build'
@@ -114,13 +115,15 @@ pipeline {
                             
                     // }
 
+                              withCredentials([usernamePassword( usernameVariable: 'digitech', passwordVariable: 'root')]) {
 
-                     sh 'cp -r ./webfrontend/build/* /var/www/html/newWeb/'
-                     sh 'cp -r ./server/* /var/www/html/newWeb/'
-                     sh 'cd server && pm2 start server.js'
+                     sh 'sudo -S cp -r ./webfrontend/build/* /var/www/html/newWeb/'
+                     sh 'sudo -S cp -r ./server/* /var/www/html/newWeb/'
+                     sh 'sudo -S cd server && pm2 start server.js'
 
                     sh 'systemctl restart nginx'
                     echo "copied to local server"
+                              }
                 }
                 
             }
