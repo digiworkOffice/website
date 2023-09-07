@@ -9,8 +9,6 @@ pipeline {
     stages {
         stage('Deploy to Local Server') {
             steps {
-                // Define the local server directory where you want to deploy your website
-                def localServerDir = '/var/www/html/'
 
                 // Remove existing files (optional)
                 sh "rm -rf ${localServerDir}*"
@@ -23,6 +21,7 @@ pipeline {
             }
         }
     }
+    
     post {
         always {
             cleanWs()
