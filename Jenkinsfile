@@ -20,15 +20,15 @@ pipeline {
                     def remoteFolderPathClientSSR = '/var/www/html/newWeb/front'
                     def remoteFolderPathServer = '/var/www/html/newWeb/server'
                     sshagent(['f190f019-b6ec-4aa9-9223-4909a2b6a584']) {
-                            sh "ssh -tt -o StrictHostKeyChecking=no ${remoteServer.user}@${remoteServer.host} 'mkdir -p ${remoteFolderPathClientSSR} && mkdir -p ${remoteFolderPathServer}'"
+                            // sh "ssh -tt -o StrictHostKeyChecking=no ${remoteServer.user}@${remoteServer.host} 'mkdir -p ${remoteFolderPathClientSSR} && mkdir -p ${remoteFolderPathServer}'"
 
-                            sh "scp -r ./build ${remoteServer.user}@${remoteServer.host}:/var/www/html/newWeb/"
+                            sh "scp -r * ${remoteServer.user}@${remoteServer.host}:/var/www/html/newWeb/"
 
-                            sh "scp -r ./server ${remoteServer.user}@${remoteServer.host}:/var/www/html/newWeb/"
+                            // sh "scp -r ./server ${remoteServer.user}@${remoteServer.host}:/var/www/html/newWeb/"
                                           echo "completed"
 
 
-                            sh "ssh -tt -o StrictHostKeyChecking=no ${remoteServer.user}@${remoteServer.host} 'cd ${remoteFolderPathServer}  && sudo pm2 reload ./pm2.json && cd ${remoteFolderPathClientSSR}  && sudo pm2 reload ./pm2.json'"
+                            // sh "ssh -tt -o StrictHostKeyChecking=no ${remoteServer.user}@${remoteServer.host} 'cd ${remoteFolderPathServer}  && sudo pm2 reload ./pm2.json && cd ${remoteFolderPathClientSSR}  && sudo pm2 reload ./pm2.json'"
                             
                     }
                     
