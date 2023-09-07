@@ -88,11 +88,11 @@ pipeline {
                 }
             }
         }
-        stage('Build') {
-            steps {
-                sh 'cd webfrontend && npm install && npm run build'
-            }
-        }
+        // stage('Build') {
+        //     steps {
+        //         sh 'cd webfrontend && npm install i && npm run build'
+        //     }
+        // }
         stage('Transfer') {
             steps {
                 script {
