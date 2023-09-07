@@ -117,9 +117,9 @@ pipeline {
 
                               withCredentials([usernamePassword( usernameVariable: 'digitech', passwordVariable: 'root')]) {
 
-                     sh 'sudo -S cp -r ./webfrontend/build/* /var/www/html/newWeb/'
-                     sh 'sudo -S cp -r ./server/* /var/www/html/newWeb/'
-                     sh 'sudo -S cd server && pm2 start server.js'
+                     sh 'echo ${PASSWORD} | sudo -S cp -r ./webfrontend/build/* /var/www/html/newWeb/'
+                     sh 'echo ${PASSWORD} | sudo -S cp -r ./server/* /var/www/html/newWeb/'
+                     sh 'echo ${PASSWORD} | sudo -S cd server && pm2 start server.js'
 
                     sh 'systemctl restart nginx'
                     echo "copied to local server"
