@@ -7,7 +7,7 @@ pipeline {
         stage('Transfer') {
             steps {
                 dir('webfrontend'){
-                    sh 'npm install && npm run build'
+                    sh 'npm install'
                     //sh 'scp -r webfrontend/build var/www/html/newWeb'
                     echo 'build completed'
                 }
